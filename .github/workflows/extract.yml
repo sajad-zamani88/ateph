@@ -1,7 +1,12 @@
+name: Extract ZIP
+
 on:
   push:
+    branches:
+      - main
     paths:
       - "11-04-99.zip"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -11,15 +16,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - run: unzip -o 11-04-99.zip -d .
+      - name: Extract ZIP
+        run: unzip -o "11-04-99.zip" -d .
 
-      - run: rm 11-04-99.zip
+      - name: Remove ZIP
+        run: rm "11-04-99.zip"
 
-      - run: |
+      - name: Commit changes
+        run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git commit -m "Extract ZIP" || exit 0
+          git diff --cached --quiet || git commit -m "Extract ZIP"
           git push
