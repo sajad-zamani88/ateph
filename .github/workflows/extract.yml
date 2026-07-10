@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "25-04-99.zip"
+
   workflow_dispatch:
 
 permissions:
@@ -16,15 +17,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - run: unzip -o "25-04-99.zip" -d .
+      - name: Extract ZIP
+        run: |
+          unzip -o "25-04-99.zip" -d . || [ $? -eq 1 ]
 
-      - run: rm "25-04-99.zip"
+      - name: Remove ZIP
+        run: rm -f "25-04-99.zip"
 
-      - run: |
+      - name: Commit and Push
+        run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+
           git add .
-          git diff --cached --quiet || git commit -m "Extract ZIP"
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+
+          git commit -m "Extract ZIP"
           git push
