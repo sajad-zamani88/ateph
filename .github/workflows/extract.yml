@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "19-04-1405-03.zip"
+      - "24-04-1405.zip"
 
   workflow_dispatch:
 
@@ -22,10 +22,10 @@ jobs:
 
       - name: Extract ZIP
         run: |
-          unzip -o "19-04-1405-03.zip" -d . || [ $? -eq 1 ]
+          unzip -o "24-04-1405.zip" -d . || [ $? -eq 1 ]
 
       - name: Remove ZIP
-        run: rm -f "19-04-1405-03.zip"
+        run: rm -f "24-04-1405.zip"
 
       - name: Commit and Push
         run: |
